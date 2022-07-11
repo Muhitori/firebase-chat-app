@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { CSSProperties, FC, useCallback, useState } from 'react';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Field, FieldProps } from 'formik';
@@ -6,7 +6,7 @@ import { Field, FieldProps } from 'formik';
 interface Props {
   name: string;
   label?: string;
-  className?: string;
+  className?: CSSProperties;
   error: string | undefined;
   touched: boolean | undefined;
 }
@@ -32,7 +32,7 @@ const PasswordInput: FC<Props> = ({
         <>
           <TextField
             fullWidth
-            className={className}
+            sx={className}
             variant="outlined"
             label={label}
             type={showPassword ? 'text' : 'password'}

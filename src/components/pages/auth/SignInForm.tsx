@@ -35,7 +35,7 @@ export const SignInForm: FC = () => {
       onSubmit={handleSubmit}
     >
       {({ errors, touched }) => (
-        <Form className={classes.form}>
+        <Form style={classes.form}>
           <TextInput
             className={classes.input}
             error={errors.email}

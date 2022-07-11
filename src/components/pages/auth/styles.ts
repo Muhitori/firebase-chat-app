@@ -1,6 +1,10 @@
-import { makeStyles } from '@mui/styles';
+import { CSSProperties } from '@mui/styles';
 
-export const useStyles = makeStyles({
+interface Styles {
+  [key: string]: CSSProperties;
+}
+
+export const useStyles = (): Styles => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -15,9 +19,9 @@ export const useStyles = makeStyles({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: '2rem',
+    marginBottom: '1rem',
   },
   input: {
-    marginBottom: '2rem',
+    marginBottom: '1rem',
   },
 });

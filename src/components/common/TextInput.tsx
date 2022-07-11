@@ -7,15 +7,13 @@ interface Props {
   touched: boolean | undefined;
   name: string;
   label?: string;
-  className?: string;
-  style?: CSSProperties;
+  className?: CSSProperties;
 }
 
 const TextInput: React.FC<Props> = ({
   name,
   label,
   className,
-  style,
   error,
   touched,
 }) => {
@@ -26,8 +24,7 @@ const TextInput: React.FC<Props> = ({
         <>
           <TextField
             fullWidth
-            style={style}
-            classes={{ root: className }}
+            sx={className}
             variant="outlined"
             label={label}
             error={showError}

@@ -17,8 +17,10 @@ export const SignUpPage = () => {
   return (
     <Grid container height="100%" alignItems="center" justifyContent="center">
       <Grid item sm={5}>
-        <Paper className={classes.root}>
-          <Typography variant="h4">Sign up</Typography>
+        <Paper sx={classes.root}>
+          <Typography sx={classes.title} variant="h4">
+            Sign up
+          </Typography>
           <SignUpForm />
           <Typography variant="body1">
             Already have an account? <Link to="/login">Sign In</Link>

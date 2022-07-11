@@ -37,7 +37,7 @@ export const SignUpForm: FC = () => {
       onSubmit={handleSubmit}
     >
       {({ errors, touched, setFieldValue }) => (
-        <Form className={classes.form}>
+        <Form style={classes.form}>
           <TextInput
             className={classes.input}
             error={errors.email}
@@ -61,7 +61,7 @@ export const SignUpForm: FC = () => {
           />
 
           <Button
-            className={classes.input}
+            sx={classes.input}
             variant="contained"
             component="label"
           >

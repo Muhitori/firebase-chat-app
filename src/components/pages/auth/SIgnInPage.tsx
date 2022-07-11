@@ -17,8 +17,8 @@ export const SignInPage = () => {
   return (
     <Grid container height="100%" alignItems="center" justifyContent="center">
       <Grid item sm={5}>
-        <Paper className={classes.root}>
-          <Typography variant="h4">Sign in</Typography>
+        <Paper sx={classes.root}>
+          <Typography sx={classes.title} variant="h4">Sign in</Typography>
           <SignInForm />
           <Typography variant="body1">
             Do not have account? <Link to="/register">Sign Up</Link>
