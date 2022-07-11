@@ -1,19 +1,21 @@
 import { makeAutoObservable } from 'mobx';
-import { User } from 'src/types/User';
+import { AuthService } from 'src/services/Auth.service';
+import { AuthUser } from 'src/types/User';
 
 export class AuthStoreModel {
-
-  private user: User | null = null;
-
   constructor() {
     makeAutoObservable(this);
   }
 
-  getUser() {
-    return this.user;
+  async signUp(user: AuthUser) {
+    await AuthService.signUp(user);
   }
 
-  setUser(user: User) {
-    this.user = user;
+  async signInWithGoogle(successCallback: () => void) {
+    await AuthService.signInWithGoogle(successCallback);
+  }
+
+  async signOut() {
+    await AuthService.signOut();
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { MainLayout } from './MainLayout';
 import { GuestLayout } from './GuestLayout';
@@ -24,19 +24,17 @@ export const RootLayout = () => {
   if (isLogged) {
     return (
       <MainLayout>
-        <Route path="/login" element={<SignIn />} />
         <Route path="/" element={<MainPage />} />
+        <Route path="/*" element={<Navigate replace to="/" />} />
       </MainLayout>
     );
   }
 
   return (
     <GuestLayout>
-      <Routes>
-        <Route path="/login" element={<SignIn />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/*" element={<Navigate replace to="/login" />} />
-      </Routes>
+      <Route path="/login" element={<SignIn />} />
+      <Route path="/register" element={<SignUp />} />
+      <Route path="/*" element={<Navigate replace to="/login" />} />
     </GuestLayout>
   );
 }
