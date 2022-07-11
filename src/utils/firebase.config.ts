@@ -8,6 +8,7 @@ const firebaseConfig = {
   messagingSenderId: '460220185551',
   appId: '1:460220185551:web:bc0a8f0433c280cf9530ba',
   measurementId: 'G-SZWBZG7NE3',
+  databaseURL: 'https://smiss-education-project-2-default-rtdb.firebaseio.com/',
 };
 
 initializeApp(firebaseConfig);

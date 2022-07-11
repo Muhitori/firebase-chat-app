@@ -1,10 +1,10 @@
 import { Button, Grid, Paper, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from 'src/hooks/UseStore';
-import { AuthForm } from './AuthForm';
+import { SignInForm } from './SignInForm';
 import { useStyles } from './styles';
 
-export const SignIn = () => {
+export const SignInPage = () => {
   const classes = useStyles();
 
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export const SignIn = () => {
       <Grid item sm={5}>
         <Paper className={classes.root}>
           <Typography variant="h4">Sign in</Typography>
-          <AuthForm pageName="Sign in" serviceCallback={authModel.signIn} />
+          <SignInForm />
           <Typography variant="body1">
             Do not have account? <Link to="/register">Sign Up</Link>
           </Typography>

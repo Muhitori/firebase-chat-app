@@ -6,26 +6,40 @@ import {
   GoogleAuthProvider, 
   signInWithPopup
 } from 'firebase/auth';
-import { AuthUser } from 'src/types/User';
+import { getDatabase, ref as databaseRef, set } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
+import { SignInUser, SignUpUser } from 'src/types/User';
 
 export const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
+
+const database = getDatabase();
+
+const storage = getStorage();
 
 export class AuthService {
   static getCurrentUser() {
     return auth.currentUser;
   }
 
-  static async signUp(user: AuthUser) {
-    const { email, password } = user;
+  static async signUp(user: SignUpUser) {
+    const { email, password, name, avatar } = user;
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    return result.user.getIdToken();
+    const userId = result.user.uid;
+
+    if (name) {
+      set(databaseRef(database, `users/${userId}`), { name });
+    }
+
+    if (avatar) {
+      const imageRef = storageRef(storage, `avatar/${userId}`);
+      await uploadBytes(imageRef, avatar);
+    }
   }
 
-  static async signIn(user: AuthUser) {
+  static async signIn(user: SignInUser) {
     const { email, password } = user;
-    const result = await signInWithEmailAndPassword(auth, email, password);
-    return result.user.getIdToken();
+    await signInWithEmailAndPassword(auth, email, password);
   }
 
   static async signInWithGoogle(successCallback: () => void) {

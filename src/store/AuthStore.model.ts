@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { AuthService } from 'src/services/Auth.service';
-import { AuthUser } from 'src/types/User';
+import { SignInUser, SignUpUser } from 'src/types/User';
 
 
 export class AuthStoreModel {
@@ -12,11 +12,11 @@ export class AuthStoreModel {
     return AuthService.getCurrentUser();
   }
 
-  async signUp(user: AuthUser) {
+  async signUp(user: SignUpUser) {
     await AuthService.signUp(user);
   }
 
-  async signIn(user: AuthUser) {
+  async signIn(user: SignInUser) {
     await AuthService.signIn(user);
   }
 

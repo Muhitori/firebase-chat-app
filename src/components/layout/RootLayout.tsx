@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { auth } from 'src/services/Auth.service';
 import { MainLayout } from './MainLayout';
 import { GuestLayout } from './GuestLayout';
-import { SignUp } from '../pages/auth/SignUp';
-import { SignIn } from '../pages/auth/SIgnInPage';
+import { SignUpPage } from '../pages/auth/SignUpPage';
+import { SignInPage } from '../pages/auth/SIgnInPage';
 import { MainPage } from '../pages/MainPage';
 
 export const RootLayout = () => {
@@ -32,8 +32,8 @@ export const RootLayout = () => {
 
   return (
     <GuestLayout>
-      <Route path="/login" element={<SignIn />} />
-      <Route path="/register" element={<SignUp />} />
+      <Route path="/login" element={<SignInPage />} />
+      <Route path="/register" element={<SignUpPage />} />
       <Route path="/*" element={<Navigate replace to="/login" />} />
     </GuestLayout>
   );

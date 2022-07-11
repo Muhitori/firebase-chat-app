@@ -2,9 +2,10 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import PasswordInput from 'src/components/common/PasswordInput';
 import TextInput from 'src/components/common/TextInput';
-import { AuthUser } from 'src/types/User';
+import { SignUpUser } from 'src/types/User';
 import { Button } from '@mui/material';
 import { FC } from 'react';
+import { useAuth } from 'src/hooks/UseStore';
 import { useStyles } from './styles';
 
 const validationSchema = Yup.object().shape({
@@ -16,46 +17,69 @@ const validationSchema = Yup.object().shape({
 
 const initialValues = {
   email: '',
-  password: ''
+  password: '',
+  name: '',
+  avatar: undefined
 };
 
-interface Props {
-  serviceCallback: (user: AuthUser) => void;
-  pageName: string;
-}
-
-export const AuthForm: FC<Props> = ({ pageName, serviceCallback }) => {
+export const SignUpForm: FC = () => {
   const classes = useStyles();
+  const authModel = useAuth();
 
-  const handleSubmit = (formData: AuthUser) => {
-    serviceCallback(formData);
+  const handleSubmit = (formData: SignUpUser) => {
+    authModel.signUp(formData);
   };
 
   return (
     <Formik
-      // innerRef={formRef}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, setFieldValue }) => (
         <Form className={classes.form}>
           <TextInput
             className={classes.input}
             error={errors.email}
             touched={touched.email}
             name="email"
-            label="Email"
+            label="Email*"
+          />
+          <TextInput
+            className={classes.input}
+            error={errors.name}
+            touched={touched.name}
+            name="name"
+            label="Name"
           />
           <PasswordInput
             className={classes.input}
             error={errors.password}
             touched={touched.password}
             name="password"
-            label="Password"
+            label="Password*"
           />
+
+          <Button
+            className={classes.input}
+            variant="contained"
+            component="label"
+          >
+            Upload Avatar
+            <input
+              type="file"
+              name="avatar"
+              onChange={(event) => {
+                if (event.currentTarget.files) {
+                  setFieldValue('avatar', event.currentTarget.files[0]);
+                }
+              }}
+              hidden
+            />
+          </Button>
+
           <Button variant="contained" type="submit">
-            {pageName}
+            Sign Up
           </Button>
         </Form>
       )}
