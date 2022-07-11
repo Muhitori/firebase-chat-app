@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Navigate, Route } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { auth } from 'src/services/Auth.service';
 import { MainLayout } from './MainLayout';
 import { GuestLayout } from './GuestLayout';
 import { SignUp } from '../pages/auth/SignUp';
@@ -8,7 +9,6 @@ import { SignIn } from '../pages/auth/SIgnInPage';
 import { MainPage } from '../pages/MainPage';
 
 export const RootLayout = () => {
-  const auth = getAuth();
   const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {

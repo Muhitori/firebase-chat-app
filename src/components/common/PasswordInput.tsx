@@ -1,24 +1,30 @@
 import { FC, useCallback, useState } from 'react';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
-import { Field, FieldProps, ErrorMessage } from 'formik';
+import { Field, FieldProps } from 'formik';
 
 interface Props {
   name: string;
   label?: string;
   className?: string;
+  error: string | undefined;
+  touched: boolean | undefined;
 }
 
 const PasswordInput: FC<Props> = ({
   name,
   label,
   className,
+  error,
+  touched,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = useCallback(() => {
     setShowPassword(!showPassword);
   }, [showPassword]);
+
+  const showError = !!error && !!touched;
 
   return (
     <Field name={name}>
@@ -27,9 +33,11 @@ const PasswordInput: FC<Props> = ({
           <TextField
             fullWidth
             className={className}
-            variant="filled"
+            variant="outlined"
             label={label}
             type={showPassword ? 'text' : 'password'}
+            error={showError}
+            helperText={showError && error}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -45,7 +53,6 @@ const PasswordInput: FC<Props> = ({
             }}
             {...field}
           />
-          <ErrorMessage name={field.name} />
         </>
       )}
     </Field>
