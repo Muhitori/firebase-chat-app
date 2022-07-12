@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface SignInUser {
   email: string;
   password: string;
@@ -16,4 +18,6 @@ export interface IUser {
   email: string | null;
   name?: string | null;
   avatar?: string | null;
+  avatarURL?: string;
+  lastLoggedIn: Timestamp;
 }

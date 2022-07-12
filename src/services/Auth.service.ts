@@ -8,7 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import {Timestamp} from 'firebase/firestore';
 import { SignInUser, SignUpUser } from 'src/types/User';
 import { UserService } from './User.service';
 
@@ -17,7 +17,6 @@ const googleProvider = new GoogleAuthProvider();
 
 
 const storage = getStorage();
-const firestore = getFirestore();
 
 export class AuthService {
 
@@ -33,54 +32,65 @@ export class AuthService {
   static async signUp(user: SignUpUser) {
     const { email, password, name, avatar } = user;
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    const userId = result.user.uid;
+
+    const { uid } = result.user;
+    const lastLoggedIn = Timestamp.fromDate(new Date());
 
     if (name) {
       await  updateProfile(result.user, { displayName: name });
     }
 
     if (avatar) {
-      const avatarURL = `avatar/${userId}`;
+      const avatarURL = `avatar/${uid}`;
       await uploadBytes(storageRef(storage, avatarURL), avatar);
       
-      await addDoc(collection(firestore, 'users'), {
-        uid: userId,
+      await UserService.createUser(uid, {
+        uid,
         email,
         name,
-        avatarURL
+        avatarURL,
+        lastLoggedIn,
       });
-
+      
       return;
     }
 
-    await addDoc(collection(firestore, 'users'), {
-      uid: userId,
+    await UserService.createUser(uid, {
+      uid,
       email,
-      name 
+      name,
+      lastLoggedIn,
     });
   }
 
   static async signIn(user: SignInUser) {
     const { email, password } = user;
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const { uid } = credential.user;
+
+    const lastLoggedIn = Timestamp.fromDate(new Date());
+    await UserService.updateUser(uid, { lastLoggedIn });
   }
 
-  static async signInWithGoogle(successCallback: () => void) {
+  static async signInWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
-
     const { uid, email, displayName: name } = result.user;
-    
+
+    const lastLoggedIn = Timestamp.fromDate(new Date());    
     const isUserExist = await UserService.isExist(uid);
 
     if (!isUserExist) {
-      await addDoc(collection(firestore, 'users'), {
+      await UserService.createUser(uid, {
         uid,
         email,
         name,
+        lastLoggedIn,
       });
+
+      return;
     }
 
-    successCallback();
+    await UserService.updateUser(uid, { lastLoggedIn });
   }
 
   static async signOut() {

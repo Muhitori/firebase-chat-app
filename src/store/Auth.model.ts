@@ -32,8 +32,8 @@ export class AuthModel {
     this.setCurrentUserAsync();
   }
 
-  async signInWithGoogle(successCallback: () => void) {
-    await AuthService.signInWithGoogle(successCallback);
+  async signInWithGoogle() {
+    await AuthService.signInWithGoogle();
     this.setCurrentUserAsync();
   }
 
