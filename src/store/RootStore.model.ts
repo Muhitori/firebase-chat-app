@@ -1,9 +1,13 @@
-import { AuthStoreModel } from './AuthStore.model';
+import { AuthModel } from './Auth.model';
+import { UserModel } from './User.model';
 
 export class RootStoreModel {
-  authStore: AuthStoreModel;
+  auth: AuthModel;
+  
+  user: UserModel;
 
   constructor() {
-    this.authStore = new AuthStoreModel();
+    this.auth = new AuthModel();
+    this.user = new UserModel();
   }
 }

@@ -9,3 +9,9 @@ export interface SignUpUser {
   name?: string;
   avatar?: File; 
 }
+
+export interface IUser {
+  uid: string;
+  email: string;
+  name?: string;
+}

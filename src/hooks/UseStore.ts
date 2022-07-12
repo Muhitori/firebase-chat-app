@@ -4,4 +4,5 @@ import { RootStoreModel } from 'src/store';
 export const StoreContext = createContext<RootStoreModel>({} as RootStoreModel);
 
 export const useStore = (): RootStoreModel => useContext(StoreContext);
-export const useAuth = () => useStore().authStore;
+export const useAuthStorage = () => useStore().auth;
+export const useUserStorage = () => useStore().user;

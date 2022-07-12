@@ -1,14 +1,14 @@
 import { Button, Grid, Paper, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from 'src/hooks/UseStore';
-import { SignInForm } from './SignInForm';
+import { useAuthStorage } from 'src/hooks/UseStore';
+import { SignInForm } from './forms/SignInForm';
 import { useStyles } from './styles';
 
 export const SignInPage = () => {
   const classes = useStyles();
 
   const navigate = useNavigate();
-  const authModel = useAuth();
+  const authModel = useAuthStorage();
 
   const onSignWithGoogle = () => {
     authModel.signInWithGoogle(() => navigate('/'));

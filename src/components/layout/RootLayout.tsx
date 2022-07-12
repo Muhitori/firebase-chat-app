@@ -6,7 +6,7 @@ import { MainLayout } from './MainLayout';
 import { GuestLayout } from './GuestLayout';
 import { SignUpPage } from '../pages/auth/SignUpPage';
 import { SignInPage } from '../pages/auth/SIgnInPage';
-import { MainPage } from '../pages/MainPage';
+import { MainPage } from '../pages/main/MainPage';
 
 export const RootLayout = () => {
   const [isLogged, setIsLogged] = useState(false);
