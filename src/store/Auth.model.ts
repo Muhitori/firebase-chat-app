@@ -1,16 +1,25 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable, observable } from 'mobx';
 import { AuthService } from 'src/services/Auth.service';
-import { SignInUser, SignUpUser } from 'src/types/User';
+import { IUser, SignInUser, SignUpUser } from 'src/types/User';
 
 
 export class AuthModel {
+  currentUser: IUser | null = null;
+
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      currentUser: observable,
+      setCurrentUser: action
+    });
   }
 
-  getCurrentUser() {
-    const user = AuthService.getCurrentUser();
-    return user;
+  setCurrentUser(user: IUser | null) {
+    this.currentUser = user;
+  }
+
+  async getCurrentUser() {
+    const user = await AuthService.getCurrentUser();
+    this.setCurrentUser(user);
   }
 
   async signUp(user: SignUpUser) {

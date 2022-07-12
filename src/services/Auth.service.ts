@@ -23,9 +23,9 @@ export class AuthService {
 
   static async getCurrentUser() {
     if (auth.currentUser) {
-      const { uid, email, displayName: name } = auth.currentUser;
-      const avatar = await UserService.getAvatar(uid);
-      return { uid, email, name, avatar };
+      const { uid } = auth.currentUser;
+      const user = await UserService.getById(uid);
+      return user;
     }
     return null;
   }
@@ -40,8 +40,17 @@ export class AuthService {
     }
 
     if (avatar) {
-      const imageRef = storageRef(storage, `avatar/${userId}`);
-      await uploadBytes(imageRef, avatar);
+      const avatarURL = `avatar/${userId}`;
+      await uploadBytes(storageRef(storage, avatarURL), avatar);
+      
+      await addDoc(collection(firestore, 'users'), {
+        uid: userId,
+        email,
+        name,
+        avatarURL
+      });
+
+      return;
     }
 
     await addDoc(collection(firestore, 'users'), {
@@ -58,15 +67,20 @@ export class AuthService {
 
   static async signInWithGoogle(successCallback: () => void) {
     const result = await signInWithPopup(auth, googleProvider);
-    successCallback();
 
     const { uid, email, displayName: name } = result.user;
     
-    await addDoc(collection(firestore, 'users'), {
-      uid,
-      email,
-      name,
-    });
+    const isUserExist = await UserService.isExist(uid);
+
+    if (!isUserExist) {
+      await addDoc(collection(firestore, 'users'), {
+        uid,
+        email,
+        name,
+      });
+    }
+
+    successCallback();
   }
 
   static async signOut() {

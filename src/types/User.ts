@@ -8,6 +8,7 @@ export interface SignUpUser {
   password: string;
   name?: string;
   avatar?: File; 
+  avatarURL?: string;
 }
 
 export interface IUser {
