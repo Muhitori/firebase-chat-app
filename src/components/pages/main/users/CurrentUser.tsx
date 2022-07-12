@@ -11,7 +11,7 @@ export const CurrentUser = observer(() => {
   const {currentUser} = authModel;
 
   useEffect(() => {
-    authModel.getCurrentUser();
+    authModel.setCurrentUserAsync();
   }, []);
 
   const onSignOut = () => {

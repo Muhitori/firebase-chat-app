@@ -17,24 +17,28 @@ export class AuthModel {
     this.currentUser = user;
   }
 
-  async getCurrentUser() {
+  async setCurrentUserAsync() {
     const user = await AuthService.getCurrentUser();
     this.setCurrentUser(user);
   }
 
   async signUp(user: SignUpUser) {
     await AuthService.signUp(user);
+    this.setCurrentUserAsync();
   }
 
   async signIn(user: SignInUser) {
     await AuthService.signIn(user);
+    this.setCurrentUserAsync();
   }
 
   async signInWithGoogle(successCallback: () => void) {
     await AuthService.signInWithGoogle(successCallback);
+    this.setCurrentUserAsync();
   }
 
   async signOut() {
     await AuthService.signOut();
+    this.setCurrentUser(null);
   }
 }
