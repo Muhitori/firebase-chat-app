@@ -1,23 +1,24 @@
 import MuiAvatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
-import { FC} from 'react';
+import { CSSProperties, FC} from 'react';
 
 interface Props {
   avatar?: string | null;
+  styles?: CSSProperties
 }
 
-export const Avatar: FC<Props> = ({ avatar }) => {
+export const Avatar: FC<Props> = ({ avatar, styles }) => {
   if (avatar) {
     return (
       <MuiAvatar
-        sx={{ marginRight: '0.5rem' }}
+        sx={{ ...styles, marginRight: '0.5rem' }}
         src={`data:image/png;base64,${avatar}`}
       />
     );
   }
 
   return (
-    <MuiAvatar sx={{ marginRight: '0.5rem' }}>
+    <MuiAvatar sx={{ ...styles, marginRight: '0.5rem' }}>
       <PersonIcon />
     </MuiAvatar>
   );

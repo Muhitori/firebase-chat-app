@@ -1,27 +1,26 @@
 import { Box } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { User } from 'src/components/common/User';
 import { useUserStorage } from 'src/hooks/UseStore';
-import { IUser } from 'src/types/User';
+import { auth } from 'src/services/Auth.service';
+import { observer } from 'mobx-react-lite';
 
-
-export const UserList: FC = () => {
+export const UserList: FC = observer(() => {
   const userModel = useUserStorage();
-  const [users, setUsers] = useState<IUser[] | null>(null);
+  const { currentUser } = auth;
+  const { users } = userModel;
 
   useEffect(() => {
-    const func = async () => {
-      const allUsers = await userModel.getAllUsers();
-      setUsers(allUsers);
-    };
-    func();
+    if (currentUser) {
+      userModel.getAllContacts(currentUser.uid);
+    }
   }, []);
   
   return (
-    <Box>
-      {users && users.map((user) => (
-        <User key={user.uid} user={user} />
+    <Box height="100%" display="flex" flexDirection="column" padding="0.5rem">
+      {!!users.length && users.map((user) => (
+        <User key={user.uid} user={user} styles={{ marginBottom: '1rem' }} />
       ))}
     </Box>
   );
-}
+})

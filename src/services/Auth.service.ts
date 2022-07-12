@@ -8,6 +8,7 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { SignInUser, SignUpUser } from 'src/types/User';
 import { UserService } from './User.service';
 
@@ -16,6 +17,7 @@ const googleProvider = new GoogleAuthProvider();
 
 
 const storage = getStorage();
+const firestore = getFirestore();
 
 export class AuthService {
 
@@ -41,6 +43,12 @@ export class AuthService {
       const imageRef = storageRef(storage, `avatar/${userId}`);
       await uploadBytes(imageRef, avatar);
     }
+
+    await addDoc(collection(firestore, 'users'), {
+      uid: userId,
+      email,
+      name 
+    });
   }
 
   static async signIn(user: SignInUser) {
@@ -52,8 +60,13 @@ export class AuthService {
     const result = await signInWithPopup(auth, googleProvider);
     successCallback();
 
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    return credential?.accessToken;
+    const { uid, email, displayName: name } = result.user;
+    
+    await addDoc(collection(firestore, 'users'), {
+      uid,
+      email,
+      name,
+    });
   }
 
   static async signOut() {
