@@ -1,10 +1,6 @@
-import { CSSProperties } from '@mui/styles';
+import { MuiStyles } from 'src/types/UI';
 
-interface Styles {
-  [key: string]: CSSProperties;
-}
-
-export const useStyles = (): Styles => ({
+export const useStyles = (): MuiStyles => ({
   root: {
     display: 'flex',
     flexDirection: 'column',

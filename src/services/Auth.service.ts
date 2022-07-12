@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth';
 import { getDatabase, ref as databaseRef, set } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
-import { SignInUser, SignUpUser } from 'src/types/User';
+import { IUser, SignInUser, SignUpUser } from 'src/types/User';
 
 export const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
@@ -18,8 +18,15 @@ const database = getDatabase();
 const storage = getStorage();
 
 export class AuthService {
-  static getCurrentUser() {
-    return auth.currentUser;
+  static getCurrentUser(): IUser | null {
+    if (auth.currentUser) {
+      const { uid, email } = auth.currentUser;
+      
+      if (email) {
+        return { uid, email }
+      }
+    }
+    return null;
   }
 
   static async signUp(user: SignUpUser) {

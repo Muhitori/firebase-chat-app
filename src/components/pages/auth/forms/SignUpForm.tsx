@@ -1,12 +1,12 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import PasswordInput from 'src/components/common/PasswordInput';
-import TextInput from 'src/components/common/TextInput';
+import { PasswordInput } from 'src/components/common/form/PasswordInput';
+import { TextInput } from 'src/components/common/form/TextInput';
 import { SignUpUser } from 'src/types/User';
 import { Button } from '@mui/material';
 import { FC } from 'react';
-import { useAuth } from 'src/hooks/UseStore';
-import { useStyles } from './styles';
+import { useAuthStorage } from 'src/hooks/UseStore';
+import { useStyles } from '../styles';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -24,7 +24,7 @@ const initialValues = {
 
 export const SignUpForm: FC = () => {
   const classes = useStyles();
-  const authModel = useAuth();
+  const authModel = useAuthStorage();
 
   const handleSubmit = (formData: SignUpUser) => {
     authModel.signUp(formData);

@@ -3,7 +3,7 @@ import { AuthService } from 'src/services/Auth.service';
 import { SignInUser, SignUpUser } from 'src/types/User';
 
 
-export class AuthStoreModel {
+export class AuthModel {
   constructor() {
     makeAutoObservable(this);
   }
