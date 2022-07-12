@@ -27,7 +27,6 @@ export class UserService {
 
   static async getAvatar(userId: string) {
     try {
-      const imgRef = storageRef(storage, `avatar/${userId}`);
       const avatar = await getBytes(storageRef(storage, `avatar/${userId}`));
       const img = Buffer.from(avatar).toString('base64');
       return img;

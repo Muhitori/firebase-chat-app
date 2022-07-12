@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const User: FC<Props> = ({ user, styles }) => {
-  const { uid, name, email, avatar } = user;
+  const { name, email, avatar } = user;
 
   return (
     <Box display="flex" alignItems="center" sx={styles}>
