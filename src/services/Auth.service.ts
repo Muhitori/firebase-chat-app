@@ -1,30 +1,29 @@
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   GoogleAuthProvider, 
-  signInWithPopup
+  signInWithPopup,
+  getAuth,
+  updateProfile
 } from 'firebase/auth';
-import { getDatabase, ref as databaseRef, set } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
-import { IUser, SignInUser, SignUpUser } from 'src/types/User';
+import { SignInUser, SignUpUser } from 'src/types/User';
+import { UserService } from './User.service';
 
 export const auth = getAuth();
 const googleProvider = new GoogleAuthProvider();
 
-const database = getDatabase();
 
 const storage = getStorage();
 
 export class AuthService {
-  static getCurrentUser(): IUser | null {
+
+  static async getCurrentUser() {
     if (auth.currentUser) {
-      const { uid, email } = auth.currentUser;
-      
-      if (email) {
-        return { uid, email }
-      }
+      const { uid, email, displayName: name } = auth.currentUser;
+      const avatar = await UserService.getAvatar(uid);
+      return { uid, email, name, avatar };
     }
     return null;
   }
@@ -35,7 +34,7 @@ export class AuthService {
     const userId = result.user.uid;
 
     if (name) {
-      set(databaseRef(database, `users/${userId}`), { name });
+      await  updateProfile(result.user, { displayName: name });
     }
 
     if (avatar) {
@@ -53,7 +52,6 @@ export class AuthService {
     const result = await signInWithPopup(auth, googleProvider);
     successCallback();
 
-    
     const credential = GoogleAuthProvider.credentialFromResult(result);
     return credential?.accessToken;
   }

@@ -9,7 +9,8 @@ export class AuthModel {
   }
 
   getCurrentUser() {
-    return AuthService.getCurrentUser();
+    const user = AuthService.getCurrentUser();
+    return user;
   }
 
   async signUp(user: SignUpUser) {

@@ -8,11 +8,11 @@ interface Props {
 }
 
 export const User: FC<Props> = ({ user }) => {
-  const { uid, name, email } = user;
+  const { uid, name, email, avatar } = user;
 
   return (
     <Box display="flex" alignItems="center">
-      <Avatar userId={uid} />
+      <Avatar avatar={avatar} />
       {name || email}
     </Box>
   );

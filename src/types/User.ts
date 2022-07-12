@@ -12,6 +12,7 @@ export interface SignUpUser {
 
 export interface IUser {
   uid: string;
-  email: string;
-  name?: string;
+  email: string | null;
+  name?: string | null;
+  avatar?: string | null;
 }

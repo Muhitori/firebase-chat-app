@@ -6,8 +6,12 @@ export class UserModel {
     makeAutoObservable(this);
   }
 
+  async getAllUsers() {
+    const users = await UserService.getAll();
+    return users;
+  }
+
   async getAvatar(userId: string) {
-    
     const avatar = await UserService.getAvatar(userId);
     return avatar;
   }

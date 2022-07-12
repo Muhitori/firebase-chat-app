@@ -1,26 +1,12 @@
 import MuiAvatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
-import { FC, useEffect, useState } from 'react';
-import { useUserStorage } from 'src/hooks/UseStore';
+import { FC} from 'react';
 
 interface Props {
-  userId: string;
+  avatar?: string | null;
 }
 
-export const Avatar: FC<Props> = ({ userId }) => {
-  const userModel = useUserStorage();
-  const [avatar, setAvatar] = useState<string | null>(null);
-
-  useEffect(() => {
-    const asyncSetAvatar = async () => {
-      const userImage = await userModel.getAvatar(userId);
-      if (userImage) {
-        setAvatar(userImage);
-      }
-    }
-    asyncSetAvatar();
-  }, []);
-  
+export const Avatar: FC<Props> = ({ avatar }) => {
   if (avatar) {
     return (
       <MuiAvatar
@@ -35,4 +21,4 @@ export const Avatar: FC<Props> = ({ userId }) => {
       <PersonIcon />
     </MuiAvatar>
   );
-}
+};
