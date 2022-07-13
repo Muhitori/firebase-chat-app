@@ -7,7 +7,9 @@ import {
   setDoc,
   getDoc,
   orderBy,
+  addDoc,
 } from 'firebase/firestore';
+import { Message } from 'src/types/Chat';
 import { AuthService } from './Auth.service';
 
 const firestore = getFirestore();
@@ -59,5 +61,14 @@ export class ChatService {
     );
 
     return conversationRef;
+  }
+
+  static async createMessage({ conversationId, userId, message }: Message) {
+    await addDoc(collection(firestore, 'message'), {
+      conversationId,
+      userId,
+      message,
+      date: new Date(),
+    });
   }
 }
