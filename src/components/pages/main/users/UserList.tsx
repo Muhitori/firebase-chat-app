@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { FC, useEffect } from 'react';
-import { User } from 'src/components/common/User';
 import { useUserStorage } from 'src/hooks/UseStore';
 import { auth } from 'src/services/Auth.service';
 import { observer } from 'mobx-react-lite';
+import { User } from './User';
 
 export const UserList: FC = observer(() => {
   const userModel = useUserStorage();

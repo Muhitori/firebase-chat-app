@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useStyles } from '../styles';
+import { useStyles } from './styles';
 import { CurrentUser } from './CurrentUser';
 import { UserList } from './UserList';
 

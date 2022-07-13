@@ -1,9 +1,9 @@
 import { Box, Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
-import { User } from 'src/components/common/User';
 import { useAuthStorage } from 'src/hooks/UseStore';
-import { useStyles } from '../styles';
+import { useStyles } from './styles';
+import { User } from './User';
 
 export const CurrentUser = observer(() => {
   const classes = useStyles();

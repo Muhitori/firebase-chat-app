@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { Input } from 'src/components/common/Input';
-import { useStyles } from '../styles';
+import { useStyles } from './styles';
 
 export const InputArea = () => {
   const classes = useStyles();

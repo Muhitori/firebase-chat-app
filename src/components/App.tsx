@@ -1,6 +1,6 @@
 import 'src/utils/firebase.config';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Box, CssBaseline } from '@mui/material';
+import { CssBaseline } from '@mui/material';
 import { RootStoreModel } from 'src/store';
 import { RootLayout } from './layout/RootLayout';
 import { StoreProvider } from './StoreProvider';
@@ -12,9 +12,7 @@ export const App = () => {
     <Router>
       <StoreProvider store={store}>
         <CssBaseline />
-        <Box height="100vh" width="100vw">
-          <RootLayout />
-        </Box>
+        <RootLayout />
       </StoreProvider>
     </Router>
   );
