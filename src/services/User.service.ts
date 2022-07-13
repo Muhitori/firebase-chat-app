@@ -4,10 +4,9 @@ import {
   collection,
   query,
   getDocs,
-  where,
-  limit,
   doc,
   setDoc,
+  getDoc,
   orderBy,
 } from 'firebase/firestore';
 import { Buffer } from 'buffer';
@@ -19,14 +18,9 @@ const firestore = getFirestore();
 
 export class UserService {
   static async isExist(userId: string) {
-    const usersQuery = query(
-      collection(firestore, 'users'),
-      where('uid', '==', userId),
-      limit(1)
-    );
-    const usersSnapshot = await getDocs(usersQuery);
+    const userRef = await getDoc(doc(firestore, 'users', userId));
 
-    return usersSnapshot.docs.length > 0;
+    return userRef.exists();
   }
 
   static async getAllContacts(currentUserId: string) {
@@ -65,15 +59,11 @@ export class UserService {
   }
 
   static async getById(userId: string) {
-    const usersQuery = query(
-      collection(firestore, 'users'),
-      where('uid', '==', userId),
-      limit(1)
-    );
-    const usersSnapshot = await getDocs(usersQuery);
+    const userRef = await getDoc(doc(firestore, 'users', userId));
 
-    const { uid, name, email, avatarURL, lastLoggedIn } =
-      usersSnapshot.docs[0].data();
+    if (!userRef.exists()) return null;
+
+    const { uid, name, email, avatarURL, lastLoggedIn } = userRef.data();
 
     if (avatarURL) {
       const avatar = await this.getAvatar(avatarURL);

@@ -1,17 +1,28 @@
 import { Navigate, Route } from 'react-router-dom';
-import { useAuthStorage } from 'src/hooks/UseStore';
-import { observer } from 'mobx-react-lite';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { auth } from 'src/services/Auth.service';
 import { MainLayout } from './MainLayout';
 import { GuestLayout } from './GuestLayout';
 import { SignUpPage } from '../pages/auth/SignUpPage';
 import { SignInPage } from '../pages/auth/SIgnInPage';
 import { MainPage } from '../pages/main/MainPage';
 
-export const RootLayout = observer(() => {
-  const authModel = useAuthStorage();
-  const { currentUser } = authModel;
+export const RootLayout = () => {
+  const [isLogged, setIsLogged] = useState(false);
 
-  if (currentUser) {
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLogged(true);
+      } else {
+        setIsLogged(false);
+      }
+    });
+  }, []);
+
+
+  if (isLogged) {
     return (
       <MainLayout>
         <Route path="/" element={<MainPage />} />
@@ -27,4 +38,4 @@ export const RootLayout = observer(() => {
       <Route path="/*" element={<Navigate replace to="/login" />} />
     </GuestLayout>
   );
-});
+};
