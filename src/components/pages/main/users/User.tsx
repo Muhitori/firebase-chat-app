@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { CSSProperties, FC } from 'react';
 import { IUser } from 'src/types/User';
-import { Avatar } from './Avatar';
+import { Avatar } from '../../../common/Avatar';
 
 interface Props {
   user: IUser;
