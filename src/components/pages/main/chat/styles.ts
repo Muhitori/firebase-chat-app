@@ -37,8 +37,10 @@ export const useStyles = (): MuiStyles => ({
   },
   time: {
     position: 'absolute',
-    bottom: 2,
-    right: 2,
+    bottom: 3,
+    right: 3,
+    color: '#757575',
+    fontSize: 10
   },
   inputArea: {
     display: 'flex',

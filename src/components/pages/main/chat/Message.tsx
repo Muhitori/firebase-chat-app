@@ -30,8 +30,8 @@ export const Message: FC<Props> = observer(({ message: { userId, message, date }
   const time = useMemo(() => {
     if (!date) return '';
 
-    const dateTime = new Date(date);
-    return `${dateTime?.getHours()}:${dateTime?.getMinutes()}`;
+    const [hours, minutes] = new Date(date).toLocaleTimeString().split(':');
+    return `${hours}:${minutes}`;
   }, [date]);
 
   const isMyMessage = useMemo(() => getCurrentUserId() === userId, [userId]);
