@@ -1,3 +1,4 @@
+import { Unsubscribe } from 'firebase/firestore';
 import { makeAutoObservable, observable, action } from 'mobx';
 import { ChatService } from 'src/services/Chat.service';
 import { UserService } from 'src/services/User.service';
@@ -12,24 +13,31 @@ export class ChatModel {
 
   companionAvatar: string | null;
 
+  unsubscribe: Unsubscribe | null;
+
+
   constructor() {
     makeAutoObservable(this, {
       companionId: observable,
       conversationId: observable,
       messages: observable,
       companionAvatar: observable,
+      unsubscribe: observable,
       setCompanionId: action,
       setConversationId: action,
+      setCompanionAvatar: action,
     });
 
     this.companionId = null;
     this.conversationId = null;
     this.messages = null;
     this.companionAvatar = null;
+    this.unsubscribe = null;
 
     // there was an undefined this, idk why
     this.setCompanionId = this.setCompanionId.bind(this);
     this.setConversationId = this.setConversationId.bind(this);
+    this.getConversation = this.getConversation.bind(this);
     this.getConversation = this.getConversation.bind(this);
   }
 
@@ -49,19 +57,35 @@ export class ChatModel {
     this.companionAvatar = avatar;
   }
 
+  setUnsubscribe(unsubscribe: Unsubscribe | null) {
+    this.unsubscribe = unsubscribe;
+  }
+
   async getConversation(uid: string) {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.setUnsubscribe(null);
+    }
+
     const conversation = await ChatService.getConversation(uid);
-    this.setCompanionId(uid);
 
     if (!conversation) return;
 
+    await ChatService.updateConversationTimestamp(conversation.id);
+    const unsubscribe = ChatService.subscribeOn(conversation.id, (messages) => {
+      this.setMessages(messages)
+    });
+
+    this.setUnsubscribe(unsubscribe);
     this.setConversationId(conversation.id);
-    await this.getMessages(conversation.id);
 
     const companion = await UserService.getById(uid);
+    this.setCompanionId(uid);
 
     if (companion?.avatar) {
       this.setCompanionAvatar(companion.avatar);
+    } else {
+      this.setCompanionAvatar(null);
     }
   }
 

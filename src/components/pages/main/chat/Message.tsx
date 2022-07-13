@@ -1,19 +1,31 @@
 import { Box, Grid, Typography } from '@mui/material';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Avatar } from 'src/components/common/Avatar';
 import { Message as MessageType } from 'src/types/Chat';
 import { useAuthStorage, useChatStorage } from 'src/hooks/UseStore';
+import { observer } from 'mobx-react-lite';
 import { useStyles } from './styles';
 
 interface Props {
   message: MessageType;
 }
-export const Message: FC<Props> = ({ message: { userId, message, date } }) => {
+
+export const Message: FC<Props> = observer(({ message: { userId, message, date } }) => {
   const classes = useStyles();
 
   const { currentUser, getCurrentUserId } = useAuthStorage();
   const { companionAvatar } = useChatStorage();
+
+  const [avatar, setAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (currentUser?.avatar && userId === getCurrentUserId()) {
+      return setAvatar(currentUser.avatar);
+    }
+
+    return setAvatar(companionAvatar);
+  }, [userId, companionAvatar]);
 
   const time = useMemo(() => {
     if (!date) return '';
@@ -23,14 +35,6 @@ export const Message: FC<Props> = ({ message: { userId, message, date } }) => {
   }, [date]);
 
   const isMyMessage = useMemo(() => getCurrentUserId() === userId, [userId]);
-
-  const avatar = useMemo(() => {
-    if (currentUser && userId === getCurrentUserId()) {
-      return currentUser.avatar;
-    }
-
-    return companionAvatar;
-  }, []);
 
   return (
     <Grid container justifyContent={isMyMessage ? 'end' : 'start'}>
@@ -43,4 +47,4 @@ export const Message: FC<Props> = ({ message: { userId, message, date } }) => {
       </Paper>
     </Grid>
   );
-};
+});

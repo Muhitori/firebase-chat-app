@@ -26,7 +26,7 @@ export const UserList: FC = observer(() => {
   const handleClick = (uid: string) => {
     getConversation(uid);
   };
-  
+
   return (
     <Box sx={classes.userList}>
       {!!contacts.length &&

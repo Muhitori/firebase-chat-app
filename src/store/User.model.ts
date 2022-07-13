@@ -13,6 +13,7 @@ export class UserModel {
   }
 
   setContacts(users: IUser[]) {
+    console.log(users);
     this.contacts = users;
   }
 

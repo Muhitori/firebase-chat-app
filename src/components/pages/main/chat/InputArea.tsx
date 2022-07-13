@@ -12,11 +12,11 @@ export const InputArea = observer(() => {
 
   const [message, setMessage] = useState('');
 
-  const onChange = (newMessage: string) => {
+  const handleChange = (newMessage: string) => {
     setMessage(newMessage);
   }
 
-  const onMessageSend = () => {
+  const handleMessageSend = () => {
     const newMessage = message.trim();
     const isInvalidMessage = !conversationId || !currentUserId || !newMessage.length;
 
@@ -31,17 +31,24 @@ export const InputArea = observer(() => {
     setMessage('');
   }
 
+  const handleKeyDown = (key: string) => {
+    if (key === 'Enter') {
+      handleMessageSend();
+    }
+  };
+
   return (
     <Box sx={classes.inputArea}>
       <TextField
         fullWidth
         value={message}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => handleChange(event.target.value)}
+        onKeyDown={(event) => handleKeyDown(event.key)}
         sx={classes.input}
-        variant='outlined'
-        placeholder='Enter message'
+        variant="outlined"
+        placeholder="Enter message"
       />
-      <Button variant="contained" onClick={onMessageSend}>
+      <Button variant="contained" onClick={handleMessageSend}>
         Send
       </Button>
     </Box>

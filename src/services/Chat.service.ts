@@ -9,6 +9,8 @@ import {
   orderBy,
   addDoc,
   where,
+  Timestamp,
+  onSnapshot
 } from 'firebase/firestore';
 import { Message } from 'src/types/Chat';
 import { AuthService } from './Auth.service';
@@ -64,6 +66,25 @@ export class ChatService {
     return conversationRef;
   }
 
+  static subscribeOn(conversationId: string, onUpdated: (messages: Message[]) => void) {
+    return onSnapshot(
+      doc(firestore, 'conversation', conversationId),
+      async () => {
+        onUpdated(await this.getMessages(conversationId));
+      }
+    );
+  }
+
+  static async updateConversationTimestamp(conversationId: string) {
+    const updatedAt = Timestamp.fromDate(new Date());
+
+    await setDoc(
+      doc(firestore, 'conversation', conversationId),
+      { updatedAt },
+      { merge: true }
+    );
+  }
+
   static async getMessages(roomId: string) {
     const messagesQuery = query(
       collection(firestore, 'message'),
@@ -88,5 +109,6 @@ export class ChatService {
       message,
       date: Date.now(),
     });
+    this.updateConversationTimestamp(conversationId);
   }
 }
