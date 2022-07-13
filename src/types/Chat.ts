@@ -7,7 +7,6 @@ export interface Conversation {
 export interface Message {
   conversationId: string;
   userId: string;
-  avatar?: string;
   message: string;
   date?: Date;
 }

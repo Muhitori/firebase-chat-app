@@ -8,6 +8,7 @@ import {
   getDoc,
   orderBy,
   addDoc,
+  where,
 } from 'firebase/firestore';
 import { Message } from 'src/types/Chat';
 import { AuthService } from './Auth.service';
@@ -63,12 +64,29 @@ export class ChatService {
     return conversationRef;
   }
 
+  static async getMessages(roomId: string) {
+    const messagesQuery = query(
+      collection(firestore, 'message'),
+      where('conversationId', '==', roomId),
+      orderBy('date', 'asc')
+    );
+
+    const messagesSnapshot = await getDocs(messagesQuery);
+
+    const messages: Message[] = messagesSnapshot.docs.map((messageDoc) => {
+      const { conversationId, userId, message, date } = messageDoc.data();
+      return { conversationId, userId, message, date };
+    });
+
+    return messages;
+  }
+
   static async createMessage({ conversationId, userId, message }: Message) {
     await addDoc(collection(firestore, 'message'), {
       conversationId,
       userId,
       message,
-      date: new Date(),
+      date: Date.now(),
     });
   }
 }

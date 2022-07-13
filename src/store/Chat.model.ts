@@ -7,15 +7,20 @@ export class ChatModel {
 
   conversationId: string | null;
 
+  messages: Message[] | null;
+
   constructor() {
     makeAutoObservable(this, {
       companionId: observable,
       conversationId: observable,
+      messages: observable,
       setCompanionId: action,
+      setConversationId: action,
     });
 
     this.companionId = null;
     this.conversationId = null;
+    this.messages = null;
 
     // there was an undefined this, idk why
     this.setCompanionId = this.setCompanionId.bind(this);
@@ -31,13 +36,23 @@ export class ChatModel {
     this.conversationId = conversationId;
   }
 
+  setMessages(messages: Message[] | null) {
+    this.messages = messages;
+  }
+
   async getConversation(uid: string) {
     const conversation = await ChatService.getConversation(uid);
     this.setCompanionId(uid);
 
-    if (conversation) {
-      this.setConversationId(conversation.id);
-    }
+    if (!conversation) return;
+
+    this.setConversationId(conversation.id);
+    await this.getMessages(conversation.id);
+  }
+
+  async getMessages(conversationId: string) {
+    const messages = await ChatService.getMessages(conversationId);
+    this.setMessages(messages);
   }
 
   async createMessage(message: Message) {

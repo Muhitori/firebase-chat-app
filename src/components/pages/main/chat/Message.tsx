@@ -2,29 +2,30 @@ import { Box, Grid, Typography } from '@mui/material';
 import { FC, useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 import { Avatar } from 'src/components/common/Avatar';
+import { Message as MessageType } from 'src/types/Chat';
+import { useAuthStorage } from 'src/hooks/UseStore';
 import { useStyles } from './styles';
 
 interface Props {
-  message: {
-    id: string;
-    message: string;
-    avatar: string | null;
-    timestamp: Date;
-  }
+  message: MessageType;
 }
-
-const MyId = '1';
-
-export const Message: FC<Props> = ({ message: { id, message, avatar, timestamp } }) => {
+export const Message: FC<Props> = ({ message: { userId, message, date } }) => {
   const classes = useStyles();
 
-  const time = `${timestamp.getHours()}:${timestamp.getMinutes()}`;
+  const currentUserId = useAuthStorage().getCurrentUserId();
 
-  const isMyMessage = useMemo(() => MyId === id, [id]);
+  const time = useMemo(() => {
+    if (!date) return '';
+
+    const dateTime = new Date(date);
+    return `${dateTime?.getHours()}:${dateTime?.getMinutes()}`;
+  }, [date]);
+
+  const isMyMessage = useMemo(() => currentUserId === userId, [userId]);
 
   return (
     <Grid container justifyContent={isMyMessage ? 'end' : 'start'}>
-      <Avatar avatar={avatar} />
+      <Avatar />
       <Paper sx={isMyMessage ? classes.myMessage : classes.notMyMessage}>
         <Box whiteSpace="normal">{message}</Box>
         <Typography variant="caption" sx={classes.time}>
