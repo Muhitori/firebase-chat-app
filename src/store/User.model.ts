@@ -3,22 +3,22 @@ import { UserService } from 'src/services/User.service';
 import { IUser } from 'src/types/User';
 
 export class UserModel {
-  users: IUser[] = [];
+  contacts: IUser[] = [];
 
   constructor() {
     makeAutoObservable(this, {
-      users: observable,
-      setUsers: action,
+      contacts: observable,
+      setContacts: action,
     });
   }
 
-  setUsers(users: IUser[]) {
-    this.users = users;
+  setContacts(users: IUser[]) {
+    this.contacts = users;
   }
 
   async getAllContacts(uid: string) {
     const users = await UserService.getAllContacts(uid);
-    this.setUsers(users);
+    this.setContacts(users);
   }
 
   async getAvatar(userId: string) {

@@ -16,4 +16,21 @@ export const useStyles = (): MuiStyles => ({
     padding: '0.5rem',
     borderBottom: '1px solid black',
   },
+  userList: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
+    paddingTop: '0.5rem',
+  },
+  user: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '5px',
+  },
+  companion: {
+    backgroundColor: '#e1f5fe',
+  },
 });

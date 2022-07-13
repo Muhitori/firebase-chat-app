@@ -20,6 +20,10 @@ const storage = getStorage();
 
 export class AuthService {
 
+  static getCurrentUserId() {
+    return auth.currentUser?.uid;
+  }
+
   static async getCurrentUser() {
     if (auth.currentUser) {
       const { uid } = auth.currentUser;
