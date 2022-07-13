@@ -32,7 +32,9 @@ export class UserService {
 
     const users: IUser[] = await Promise.all(
       usersSnapshot.docs
-        .filter((record) => record.data().uid !== currentUserId)
+        .filter(
+          (record) => record.data().uid !== currentUserId && record.data().uid !== undefined
+        )
         .map(async (record) => {
           const { uid, name, email, avatarURL, lastLoggedIn } = record.data();
 

@@ -1,28 +1,19 @@
 import { Grid } from '@mui/material'
+import { observer } from 'mobx-react-lite';
+import { useChatStorage } from 'src/hooks/UseStore';
 import { useStyles } from './styles';
 import { Message } from './Message';
 
-const messages = [
-  {
-    id: '1',
-    message:
-      'Renders?Renders?Renders?Renders?Renders?Renders?Renders?Renders?Renders?Renders?',
-    avatar: null,
-    timestamp: new Date(),
-  },
-  {
-    id: '2',
-    message:
-      'Renders!Renders!Renders !Renders!Renders!Renders !Renders!Renders!Renders !Renders!Renders!Renders!',
-    avatar: null,
-    timestamp: new Date(),
-  },
-];
-
-export const MessageList = () => {
+export const MessageList = observer(() => {
   const classes = useStyles();
+  const { messages } = useChatStorage();
 
-  return <Grid container sx={classes.messageList}>
-    {messages.map(message => <Message key={message.id} message={message} />)}
-  </Grid>;
-}
+  return (
+    <Grid container sx={classes.messageList}>
+      {messages &&
+        messages.map((message, index) => (
+          <Message key={index} message={message} />
+        ))}
+    </Grid>
+  );
+});
