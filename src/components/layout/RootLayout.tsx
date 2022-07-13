@@ -21,6 +21,7 @@ export const RootLayout = () => {
     });
   }, []);
 
+
   if (isLogged) {
     return (
       <MainLayout>
@@ -37,4 +38,4 @@ export const RootLayout = () => {
       <Route path="/*" element={<Navigate replace to="/login" />} />
     </GuestLayout>
   );
-}
+};
