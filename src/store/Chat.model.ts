@@ -1,5 +1,6 @@
 import { makeAutoObservable, observable, action } from 'mobx';
 import { ChatService } from 'src/services/Chat.service';
+import { UserService } from 'src/services/User.service';
 import { Message } from 'src/types/Chat';
 
 export class ChatModel {
@@ -9,11 +10,14 @@ export class ChatModel {
 
   messages: Message[] | null;
 
+  companionAvatar: string | null;
+
   constructor() {
     makeAutoObservable(this, {
       companionId: observable,
       conversationId: observable,
       messages: observable,
+      companionAvatar: observable,
       setCompanionId: action,
       setConversationId: action,
     });
@@ -21,6 +25,7 @@ export class ChatModel {
     this.companionId = null;
     this.conversationId = null;
     this.messages = null;
+    this.companionAvatar = null;
 
     // there was an undefined this, idk why
     this.setCompanionId = this.setCompanionId.bind(this);
@@ -40,6 +45,10 @@ export class ChatModel {
     this.messages = messages;
   }
 
+  setCompanionAvatar(avatar: string | null) {
+    this.companionAvatar = avatar;
+  }
+
   async getConversation(uid: string) {
     const conversation = await ChatService.getConversation(uid);
     this.setCompanionId(uid);
@@ -48,6 +57,12 @@ export class ChatModel {
 
     this.setConversationId(conversation.id);
     await this.getMessages(conversation.id);
+
+    const companion = await UserService.getById(uid);
+
+    if (companion?.avatar) {
+      this.setCompanionAvatar(companion.avatar);
+    }
   }
 
   async getMessages(conversationId: string) {
