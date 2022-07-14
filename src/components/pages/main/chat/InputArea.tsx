@@ -42,7 +42,7 @@ export const InputArea = observer(() => {
     }
   };
 
-  return (
+  return conversationId ? (
     <Box sx={classes.inputArea}>
       <TextField
         fullWidth
@@ -57,5 +57,5 @@ export const InputArea = observer(() => {
         Send
       </Button>
     </Box>
-  );
+  ) : null;
 });
