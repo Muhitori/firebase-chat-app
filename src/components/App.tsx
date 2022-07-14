@@ -5,6 +5,7 @@ import { RootStoreModel } from 'src/store';
 import { SnackbarProvider } from 'notistack';
 import { RootLayout } from './layout/RootLayout';
 import { StoreProvider } from './StoreProvider';
+import { SnackbarGenerator } from './common/SnackbarGenerator';
 
 const store = new RootStoreModel();
 const MAX_SNACK = 3;
@@ -14,6 +15,7 @@ export const App = () => {
     <Router>
       <SnackbarProvider maxSnack={MAX_SNACK}>
         <StoreProvider store={store}>
+          <SnackbarGenerator />
           <CssBaseline />
           <RootLayout />
         </StoreProvider>

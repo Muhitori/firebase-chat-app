@@ -7,6 +7,7 @@ const message: CSSProperties = {
   maxWidth: '50%',
   marginBottom: '0.5rem',
   padding: '0.5rem',
+  paddingBottom: 0
 }
 
 const INPUT_AREA_HEIGHT = '5rem';
@@ -35,13 +36,14 @@ export const useStyles = (): MuiStyles => ({
     backgroundColor: '#f48fb1',
   },
   username: {
+    color: '#757575',
     fontSize: 10,
-    fontWeight: 700
+    fontWeight: 700,
   },
   time: {
     color: '#757575',
     fontSize: 10,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   inputArea: {
     display: 'flex',
