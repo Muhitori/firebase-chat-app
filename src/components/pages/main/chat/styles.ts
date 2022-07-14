@@ -2,12 +2,11 @@ import { CSSProperties } from '@mui/styles';
 import { MuiStyles } from 'src/types/UI';
 
 const message: CSSProperties = {
-  position: 'relative',
+  display: 'flex',
+  flexDirection: 'column',
   maxWidth: '50%',
   marginBottom: '0.5rem',
   padding: '0.5rem',
-  paddingRight: '2rem',
-  paddingBottom: '1rem'
 }
 
 const INPUT_AREA_HEIGHT = '5rem';
@@ -35,12 +34,14 @@ export const useStyles = (): MuiStyles => ({
     ...message,
     backgroundColor: '#f48fb1',
   },
+  username: {
+    fontSize: 10,
+    fontWeight: 700
+  },
   time: {
-    position: 'absolute',
-    bottom: 3,
-    right: 3,
     color: '#757575',
-    fontSize: 10
+    fontSize: 10,
+    alignSelf: 'flex-end'
   },
   inputArea: {
     display: 'flex',

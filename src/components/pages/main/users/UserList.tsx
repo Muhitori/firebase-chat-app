@@ -10,16 +10,16 @@ export const UserList: FC = observer(() => {
   const userModel = useUserStorage();
   const { contacts } = userModel;
 
-  const currentUserId = useAuthStorage().getCurrentUserId();
+  const { currentUser } = useAuthStorage();
 
   const chatStorage = useChatStorage();
   const { companionId, getConversation } = chatStorage;
 
   useEffect(() => {
-    if (currentUserId) {
-      userModel.getAllContacts(currentUserId);
+    if (currentUser?.uid) {
+      userModel.getAllContacts(currentUser?.uid);
     }
-  }, []);
+  }, [currentUser?.uid]);
 
   const isCompanion = (uid: string) => uid === companionId;
 

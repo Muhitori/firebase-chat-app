@@ -22,11 +22,14 @@ export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
     return styles;
   }, [isCompanion]);
 
+  const handleUserClick = () => {
+    if (onClick) {
+      onClick(uid);
+    }
+  }
+
   return (
-    <Box
-      sx={{ ...classes.user, ...renderStyles }}
-      onClick={() => onClick && onClick(uid)}
-    >
+    <Box sx={{ ...classes.user, ...renderStyles }} onClick={handleUserClick}>
       <Avatar avatar={avatarURL} />
       <Typography noWrap>{name || email}</Typography>
     </Box>

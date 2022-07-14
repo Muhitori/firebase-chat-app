@@ -82,18 +82,19 @@ export class ChatService {
     const messagesSnapshot = await getDocs(messagesQuery);
 
     const messages: Message[] = messagesSnapshot.docs.map((messageDoc) => {
-      const { conversationId, userId, message, date } = messageDoc.data();
-      return { conversationId, userId, message, date };
+      const { conversationId, userId, userName, message, date } = messageDoc.data();
+      return { conversationId, userId, userName, message, date };
     });
 
     return messages;
   }
 
-  static async createMessage({ conversationId, userId, message }: Message) {
+  static async createMessage({ conversationId, userId, message, userName }: Message) {
     await addDoc(collection(firestore, 'message'), {
       conversationId,
       userId,
       message,
+      userName,
       date: Date.now(),
     });
     this.updateConversationTimestamp(conversationId);

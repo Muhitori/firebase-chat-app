@@ -65,12 +65,13 @@ export class ChatModel {
     if (this.unsubscribe) {
       this.unsubscribe();
       this.setUnsubscribe(null);
+      this.setMessages(null);
     }
 
     const conversation = await ChatService.getConversation(uid);
 
     if (!conversation) return;
-    
+
     const companion = await UserService.getById(uid);
     this.setCompanionAvatar(companion?.avatarURL);
     this.setCompanionId(uid);

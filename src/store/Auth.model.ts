@@ -17,10 +17,6 @@ export class AuthModel {
     this.currentUser = user;
   }
 
-  getCurrentUserId() {
-    return AuthService.getCurrentUserId();
-  }
-
   async setCurrentUserAsync() {
     const user = await AuthService.getCurrentUser();
     this.setCurrentUser(user);

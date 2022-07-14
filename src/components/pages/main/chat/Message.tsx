@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { FC, useEffect, useMemo, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Avatar } from 'src/components/common/Avatar';
@@ -11,16 +11,16 @@ interface Props {
   message: MessageType;
 }
 
-export const Message: FC<Props> = observer(({ message: { userId, message, date } }) => {
+export const Message: FC<Props> = observer(({ message: { userId, message, userName, date } }) => {
   const classes = useStyles();
 
-  const { currentUser, getCurrentUserId } = useAuthStorage();
+  const { currentUser } = useAuthStorage();
   const { companionAvatar } = useChatStorage();
 
   const [avatar, setAvatar] = useState<string | null | undefined>(null);
 
   useEffect(() => {
-    if (userId === getCurrentUserId()) {
+    if (userId === currentUser?.uid) {
       return setAvatar(currentUser?.avatarURL);
     }
 
@@ -34,13 +34,22 @@ export const Message: FC<Props> = observer(({ message: { userId, message, date }
     return `${hours}:${minutes}`;
   }, [date]);
 
-  const isMyMessage = useMemo(() => getCurrentUserId() === userId, [userId]);
+  const isMyMessage = useMemo(() => currentUser?.uid === userId, [userId]);
 
   return (
-    <Grid container justifyContent={isMyMessage ? 'end' : 'start'}>
+    <Grid
+      container
+      alignItems="center"
+      justifyContent={isMyMessage ? 'end' : 'start'}
+    >
       <Avatar avatar={avatar} />
       <Paper sx={isMyMessage ? classes.myMessage : classes.notMyMessage}>
-        <Box whiteSpace="normal">{message}</Box>
+        <Typography variant="subtitle2" sx={classes.username}>
+          {userName}
+        </Typography>
+        <Typography variant="body1" whiteSpace="normal" paddingRight="2rem">
+          {message}
+        </Typography>
         <Typography variant="caption" sx={classes.time}>
           {time}
         </Typography>
