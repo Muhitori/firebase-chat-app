@@ -3,8 +3,8 @@ import * as Yup from 'yup';
 import { PasswordInput } from 'src/components/common/form/PasswordInput';
 import { TextInput } from 'src/components/common/form/TextInput';
 import { SignUpUser } from 'src/types/User';
-import { Button } from '@mui/material';
-import { FC } from 'react';
+import { Box, Button } from '@mui/material';
+import { FC, useState } from 'react';
 import { useAuthStorage } from 'src/hooks/UseStore';
 import { useStyles } from '../styles';
 
@@ -25,6 +25,7 @@ const initialValues = {
 export const SignUpForm: FC = () => {
   const classes = useStyles();
   const authModel = useAuthStorage();
+  const [filename, setFilename] = useState<string | null>(null);
 
   const handleSubmit = (formData: SignUpUser) => {
     authModel.signUp(formData);
@@ -60,23 +61,24 @@ export const SignUpForm: FC = () => {
             label="Password*"
           />
 
-          <Button
-            sx={classes.input}
-            variant="contained"
-            component="label"
-          >
-            Upload Avatar
-            <input
-              type="file"
-              name="avatar"
-              onChange={(event) => {
-                if (event.currentTarget.files) {
-                  setFieldValue('avatar', event.currentTarget.files[0]);
-                }
-              }}
-              hidden
-            />
-          </Button>
+          <Box>
+            <Button sx={classes.input} variant="contained" component="label">
+              Upload Avatar
+              <input
+                type="file"
+                name="avatar"
+                onChange={(event) => {
+                  if (event.currentTarget.files) {
+                    const file = event.currentTarget.files[0];
+                    setFieldValue('avatar', file);
+                    setFilename(file.name);
+                  }
+                }}
+                hidden
+              />
+            </Button>
+            {!!filename && `(${filename})`}
+          </Box>
 
           <Button variant="contained" type="submit">
             Sign Up
