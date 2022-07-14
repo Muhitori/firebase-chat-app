@@ -29,6 +29,7 @@ export const useStyles = (): MuiStyles => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '5px',
+    paddingLeft: '0.2rem',
     cursor: 'pointer'
   },
   companion: {
