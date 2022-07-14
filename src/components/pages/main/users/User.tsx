@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { CSSProperties, FC, useMemo } from 'react';
 import { IUser } from 'src/types/User';
 import { Avatar } from '../../../common/Avatar';
@@ -28,7 +28,7 @@ export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
       onClick={() => onClick && onClick(uid)}
     >
       <Avatar avatar={avatar} />
-      {name || email}
+      <Typography noWrap>{name || email}</Typography>
     </Box>
   );
 };
