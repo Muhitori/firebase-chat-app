@@ -17,7 +17,7 @@ export const UserList: FC = observer(() => {
 
   useEffect(() => {
     if (currentUser?.uid) {
-      userModel.getAllContacts(currentUser?.uid);
+      userModel.subscribeOnContacts(currentUser?.uid);
     }
   }, [currentUser?.uid]);
 
