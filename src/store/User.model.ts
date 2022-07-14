@@ -20,9 +20,4 @@ export class UserModel {
     const users = await UserService.getAllContacts(uid);
     this.setContacts(users);
   }
-
-  async getAvatar(userId: string) {
-    const avatar = await UserService.getAvatar(userId);
-    return avatar;
-  }
 }

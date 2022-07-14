@@ -17,11 +17,11 @@ export const Message: FC<Props> = observer(({ message: { userId, message, date }
   const { currentUser, getCurrentUserId } = useAuthStorage();
   const { companionAvatar } = useChatStorage();
 
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<string | null | undefined>(null);
 
   useEffect(() => {
-    if (currentUser?.avatar && userId === getCurrentUserId()) {
-      return setAvatar(currentUser.avatar);
+    if (userId === getCurrentUserId()) {
+      return setAvatar(currentUser?.avatarURL);
     }
 
     return setAvatar(companionAvatar);

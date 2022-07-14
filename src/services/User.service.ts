@@ -1,4 +1,3 @@
-import { getStorage, getBytes, ref as storageRef } from 'firebase/storage';
 import {
   getFirestore,
   collection,
@@ -9,10 +8,7 @@ import {
   getDoc,
   orderBy,
 } from 'firebase/firestore';
-import { Buffer } from 'buffer';
 import { IUser } from 'src/types/User';
-
-const storage = getStorage();
 
 const firestore = getFirestore();
 
@@ -37,27 +33,11 @@ export class UserService {
         )
         .map(async (record) => {
           const { uid, name, email, avatarURL, lastLoggedIn } = record.data();
-
-          if (avatarURL) {
-            const avatar = await this.getAvatar(avatarURL);
-            return { uid, name, email, avatar, lastLoggedIn };
-          }
-
-          return { uid, name, email, lastLoggedIn };
+          return { uid, name, email, avatarURL, lastLoggedIn };
         })
     );
 
     return users;
-  }
-
-  static async getAvatar(avatarURL: string) {
-    try {
-      const avatar = await getBytes(storageRef(storage, avatarURL));
-      const img = Buffer.from(avatar).toString('base64');
-      return img;
-    } catch (err) {
-      return null;
-    }
   }
 
   static async getById(userId: string) {
@@ -67,12 +47,7 @@ export class UserService {
 
     const { uid, name, email, avatarURL, lastLoggedIn } = userRef.data();
 
-    if (avatarURL) {
-      const avatar = await this.getAvatar(avatarURL);
-      return { uid, name, email, avatar, lastLoggedIn };
-    }
-
-    return { uid, name, email, lastLoggedIn };
+    return { uid, name, email, avatarURL, lastLoggedIn };
   }
 
   static async createUser(uid: string, fields: Partial<IUser>) {
