@@ -65,11 +65,16 @@ export class ChatModel {
     if (this.unsubscribe) {
       this.unsubscribe();
       this.setUnsubscribe(null);
+      this.setMessages(null);
     }
 
     const conversation = await ChatService.getConversation(uid);
 
     if (!conversation) return;
+
+    const companion = await UserService.getById(uid);
+    this.setCompanionAvatar(companion?.avatarURL);
+    this.setCompanionId(uid);
 
     await ChatService.updateConversationTimestamp(conversation.id);
     const unsubscribe = ChatService.subscribeOn(conversation.id, (messages) => {
@@ -78,15 +83,6 @@ export class ChatModel {
 
     this.setUnsubscribe(unsubscribe);
     this.setConversationId(conversation.id);
-
-    const companion = await UserService.getById(uid);
-    this.setCompanionId(uid);
-
-    if (companion?.avatar) {
-      this.setCompanionAvatar(companion.avatar);
-    } else {
-      this.setCompanionAvatar(null);
-    }
   }
 
   async getMessages(conversationId: string) {

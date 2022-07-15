@@ -1,4 +1,3 @@
-import { getStorage, getBytes, ref as storageRef } from 'firebase/storage';
 import {
   getFirestore,
   collection,
@@ -8,19 +7,25 @@ import {
   setDoc,
   getDoc,
   orderBy,
+  onSnapshot,
 } from 'firebase/firestore';
-import { Buffer } from 'buffer';
 import { IUser } from 'src/types/User';
-
-const storage = getStorage();
 
 const firestore = getFirestore();
 
 export class UserService {
   static async isExist(userId: string) {
     const userRef = await getDoc(doc(firestore, 'users', userId));
-
     return userRef.exists();
+  }
+
+  static subscribeOnContacts(
+    currentUserId: string,
+    onUpdated: (messages: IUser[]) => void
+  ) {
+    return onSnapshot(collection(firestore, 'users'), async () => {
+      onUpdated(await this.getAllContacts(currentUserId));
+    });
   }
 
   static async getAllContacts(currentUserId: string) {
@@ -33,31 +38,17 @@ export class UserService {
     const users: IUser[] = await Promise.all(
       usersSnapshot.docs
         .filter(
-          (record) => record.data().uid !== currentUserId && record.data().uid !== undefined
+          (record) =>
+            record.data().uid !== currentUserId &&
+            record.data().uid !== undefined
         )
         .map(async (record) => {
           const { uid, name, email, avatarURL, lastLoggedIn } = record.data();
-
-          if (avatarURL) {
-            const avatar = await this.getAvatar(avatarURL);
-            return { uid, name, email, avatar, lastLoggedIn };
-          }
-
-          return { uid, name, email, lastLoggedIn };
+          return { uid, name, email, avatarURL, lastLoggedIn };
         })
     );
 
     return users;
-  }
-
-  static async getAvatar(avatarURL: string) {
-    try {
-      const avatar = await getBytes(storageRef(storage, avatarURL));
-      const img = Buffer.from(avatar).toString('base64');
-      return img;
-    } catch (err) {
-      return null;
-    }
   }
 
   static async getById(userId: string) {
@@ -67,12 +58,7 @@ export class UserService {
 
     const { uid, name, email, avatarURL, lastLoggedIn } = userRef.data();
 
-    if (avatarURL) {
-      const avatar = await this.getAvatar(avatarURL);
-      return { uid, name, email, avatar, lastLoggedIn };
-    }
-
-    return { uid, name, email, lastLoggedIn };
+    return { uid, name, email, avatarURL, lastLoggedIn };
   }
 
   static async createUser(uid: string, fields: Partial<IUser>) {

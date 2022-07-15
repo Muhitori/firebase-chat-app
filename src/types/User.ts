@@ -10,14 +10,12 @@ export interface SignUpUser {
   password: string;
   name?: string;
   avatar?: File; 
-  avatarURL?: string;
 }
 
 export interface IUser {
   uid: string;
   email: string | null;
   name?: string | null;
-  avatar?: string | null;
-  avatarURL?: string;
+  avatarURL?: string | null;
   lastLoggedIn: Timestamp;
 }

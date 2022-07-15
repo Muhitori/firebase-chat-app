@@ -13,7 +13,7 @@ interface Props {
 
 export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
   const classes = useStyles();
-  const { uid, name, email, avatar } = user;
+  const { uid, name, email, avatarURL } = user;
 
   const renderStyles = useMemo(() => {
     if (isCompanion) {
@@ -22,12 +22,15 @@ export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
     return styles;
   }, [isCompanion]);
 
+  const handleUserClick = () => {
+    if (onClick) {
+      onClick(uid);
+    }
+  }
+
   return (
-    <Box
-      sx={{ ...classes.user, ...renderStyles }}
-      onClick={() => onClick && onClick(uid)}
-    >
-      <Avatar avatar={avatar} />
+    <Box sx={{ ...classes.user, ...renderStyles }} onClick={handleUserClick}>
+      <Avatar avatar={avatarURL} />
       <Typography noWrap>{name || email}</Typography>
     </Box>
   );

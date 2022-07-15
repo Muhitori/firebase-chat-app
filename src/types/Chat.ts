@@ -11,5 +11,6 @@ export interface Message {
   conversationId: string;
   userId: string;
   message: string;
+  userName: string | null;
   date?: Date;
 }

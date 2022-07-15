@@ -12,7 +12,7 @@ export const Avatar: FC<Props> = ({ avatar, styles }) => {
     return (
       <MuiAvatar
         sx={{ ...styles, marginRight: '0.5rem' }}
-        src={`data:image/png;base64,${avatar}`}
+        src={avatar}
       />
     );
   }

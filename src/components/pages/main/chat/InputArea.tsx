@@ -7,7 +7,7 @@ import { useStyles } from './styles';
 export const InputArea = observer(() => {
   const classes = useStyles();
 
-  const currentUserId = useAuthStorage().getCurrentUserId();
+  const { currentUser } = useAuthStorage();
   const { conversationId, createMessage } = useChatStorage();
 
   const [message, setMessage] = useState('');
@@ -17,16 +17,21 @@ export const InputArea = observer(() => {
   }
 
   const handleMessageSend = () => {
+    if (!currentUser) return;
+    const { uid, name, email } = currentUser;
     const newMessage = message.trim();
-    const isInvalidMessage = !conversationId || !currentUserId || !newMessage.length;
 
-    if (isInvalidMessage) return;
+    const isInvalidMessage = !conversationId || !uid || !newMessage.length;
+    const isUserNameExists = name || email;
 
-    createMessage({
-      conversationId,
-      userId: currentUserId,
-      message: newMessage,
-    });
+    if (isInvalidMessage || !isUserNameExists) return;
+    
+      createMessage({
+        conversationId,
+        userId: uid,
+        userName: name || email,
+        message: newMessage,
+      });
 
     setMessage('');
   }
@@ -37,7 +42,7 @@ export const InputArea = observer(() => {
     }
   };
 
-  return (
+  return conversationId ? (
     <Box sx={classes.inputArea}>
       <TextField
         fullWidth
@@ -52,5 +57,5 @@ export const InputArea = observer(() => {
         Send
       </Button>
     </Box>
-  );
+  ) : null;
 });

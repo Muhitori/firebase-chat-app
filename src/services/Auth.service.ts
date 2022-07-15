@@ -7,7 +7,7 @@ import {
   getAuth,
   updateProfile
 } from 'firebase/auth';
-import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref as storageRef, uploadBytes } from 'firebase/storage';
 import {Timestamp} from 'firebase/firestore';
 import { SignInUser, SignUpUser } from 'src/types/User';
 import { UserService } from './User.service';
@@ -45,8 +45,9 @@ export class AuthService {
     }
 
     if (avatar) {
-      const avatarURL = `avatar/${uid}`;
-      await uploadBytes(storageRef(storage, avatarURL), avatar);
+      const avatarRef = storageRef(storage, `avatar/${uid}`);
+      await uploadBytes(avatarRef, avatar);
+      const avatarURL = await getDownloadURL(avatarRef);
       
       await UserService.createUser(uid, {
         uid,
