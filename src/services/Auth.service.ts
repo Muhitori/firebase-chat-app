@@ -55,16 +55,16 @@ export class AuthService {
         avatarURL,
         lastLoggedIn,
       });
-
-      return;
+    } else {
+      await UserService.createUser(uid, {
+        uid,
+        email,
+        name,
+        lastLoggedIn,
+      });
     }
 
-    await UserService.createUser(uid, {
-      uid,
-      email,
-      name,
-      lastLoggedIn,
-    });
+    await UserService.setUserOnline(uid);
   }
 
   static async signIn(user: SignInUser) {
