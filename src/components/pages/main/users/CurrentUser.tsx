@@ -21,8 +21,10 @@ export const CurrentUser = observer(() => {
   };
   
   return (
-    <Box sx={classes.currentUser}>
-      {currentUser && <User user={currentUser} />}
+    <Box sx={classes.currentUserContainer}>
+      {currentUser && (
+        <User styles={classes.currentUser} user={currentUser} />
+      )}
       <Button onClick={onSignOut}>Sign out</Button>
     </Box>
   );

@@ -3,15 +3,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import { CSSProperties, FC } from 'react';
 import { Badge, styled } from '@mui/material';
 
-const OnlineBadge = styled(Badge)(({ theme }) => ({
+const OnlineBadge = styled(Badge)(() => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#44b700',
     color: '#44b700',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
       width: '100%',
       height: '100%',
       borderRadius: '50%',
@@ -19,24 +15,22 @@ const OnlineBadge = styled(Badge)(({ theme }) => ({
       border: '1px solid currentColor',
       content: '""',
     },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
   },
 }));
 
-const OfflineBadge = styled(Badge)(({ theme }) => ({
+const OfflineBadge = styled(Badge)(() => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#9e9e9e',
-    color: '#9e9e9e',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '1px solid currentColor',
-      content: '""',
-    },
   },
 }));
 
@@ -49,11 +43,12 @@ interface Props {
 export const AvatarWithBadge: FC<Props> = ({ online, avatar, styles }) => {
   if (avatar) {
     const userAvatar = (
-      <MuiAvatar sx={{ ...styles, marginRight: '0.5rem' }} src={avatar} />
+      <MuiAvatar src={avatar} />
     );
 
     return online ? (
       <OnlineBadge
+        sx={{ ...styles, marginRight: '0.5rem' }}
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant="dot"
@@ -62,6 +57,7 @@ export const AvatarWithBadge: FC<Props> = ({ online, avatar, styles }) => {
       </OnlineBadge>
     ) : (
       <OfflineBadge
+        sx={{ ...styles, marginRight: '0.5rem' }}
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         variant="dot"
@@ -72,13 +68,14 @@ export const AvatarWithBadge: FC<Props> = ({ online, avatar, styles }) => {
   }
 
   const userAvatar = (
-    <MuiAvatar sx={{ ...styles, marginRight: '0.5rem' }}>
+    <MuiAvatar>
       <PersonIcon />
     </MuiAvatar>
   );
 
   return online ? (
     <OnlineBadge
+      sx={{ ...styles, marginRight: '0.5rem' }}
       overlap="circular"
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       variant="dot"
@@ -87,6 +84,7 @@ export const AvatarWithBadge: FC<Props> = ({ online, avatar, styles }) => {
     </OnlineBadge>
   ) : (
     <OfflineBadge
+      sx={{ ...styles, marginRight: '0.5rem' }}
       overlap="circular"
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       variant="dot"
