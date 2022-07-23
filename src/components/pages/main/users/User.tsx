@@ -13,7 +13,7 @@ interface Props {
 
 export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
   const classes = useStyles();
-  const { uid, name, email, avatarURL } = user;
+  const { uid, name, email, avatarURL, online } = user;
 
   const renderStyles = useMemo(() => {
     if (isCompanion) {
@@ -30,7 +30,7 @@ export const User: FC<Props> = ({ user, styles, isCompanion, onClick }) => {
 
   return (
     <Box sx={{ ...classes.user, ...renderStyles }} onClick={handleUserClick}>
-      <Avatar avatar={avatarURL} />
+      <Avatar online={online} avatar={avatarURL} />
       <Typography noWrap>{name || email}</Typography>
     </Box>
   );

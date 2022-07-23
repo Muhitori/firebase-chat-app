@@ -19,7 +19,6 @@ const googleProvider = new GoogleAuthProvider();
 const storage = getStorage();
 
 export class AuthService {
-
   static getCurrentUserId() {
     return auth.currentUser?.uid;
   }
@@ -41,14 +40,14 @@ export class AuthService {
     const lastLoggedIn = Timestamp.fromDate(new Date());
 
     if (name) {
-      await  updateProfile(result.user, { displayName: name });
+      await updateProfile(result.user, { displayName: name });
     }
 
     if (avatar) {
       const avatarRef = storageRef(storage, `avatar/${uid}`);
       await uploadBytes(avatarRef, avatar);
       const avatarURL = await getDownloadURL(avatarRef);
-      
+
       await UserService.createUser(uid, {
         uid,
         email,
@@ -56,7 +55,7 @@ export class AuthService {
         avatarURL,
         lastLoggedIn,
       });
-      
+
       return;
     }
 
@@ -75,13 +74,14 @@ export class AuthService {
 
     const lastLoggedIn = Timestamp.fromDate(new Date());
     await UserService.updateUser(uid, { lastLoggedIn });
+    await UserService.setUserOnline(uid);
   }
 
   static async signInWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
     const { uid, email, displayName: name } = result.user;
 
-    const lastLoggedIn = Timestamp.fromDate(new Date());    
+    const lastLoggedIn = Timestamp.fromDate(new Date());
     const isUserExist = await UserService.isExist(uid);
 
     if (!isUserExist) {
@@ -91,14 +91,15 @@ export class AuthService {
         name,
         lastLoggedIn,
       });
-
-      return;
+    } else {
+      await UserService.updateUser(uid, { lastLoggedIn });
     }
 
-    await UserService.updateUser(uid, { lastLoggedIn });
+    await UserService.setUserOnline(uid);
   }
 
-  static async signOut() {
+  static async signOut(uid: string) {
     await signOut(auth);
+    await UserService.setUserOffline(uid);
   }
 }

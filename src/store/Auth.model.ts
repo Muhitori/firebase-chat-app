@@ -53,8 +53,8 @@ export class AuthModel {
     }
   }
 
-  async signOut() {
-    await AuthService.signOut();
+  async signOut(uid: string) {
+    await AuthService.signOut(uid);
     this.setCurrentUser(null);
   }
 }

@@ -17,5 +17,7 @@ export interface IUser {
   email: string | null;
   name?: string | null;
   avatarURL?: string | null;
+
+  online: boolean; 
   lastLoggedIn: Timestamp;
 }

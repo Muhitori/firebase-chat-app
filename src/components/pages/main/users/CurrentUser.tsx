@@ -15,7 +15,9 @@ export const CurrentUser = observer(() => {
   }, []);
 
   const onSignOut = () => {
-    authModel.signOut();
+    if (currentUser) {
+      authModel.signOut(currentUser.uid);
+    }
   };
   
   return (

@@ -31,7 +31,8 @@ export class UserService {
   static async getAllContacts(currentUserId: string) {
     const usersQuery = query(
       collection(firestore, 'users'),
-      orderBy('lastLoggedIn', 'desc')
+      orderBy('lastLoggedIn', 'desc'),
+      orderBy('online', 'desc')
     );
     const usersSnapshot = await getDocs(usersQuery);
 
@@ -43,8 +44,8 @@ export class UserService {
             record.data().uid !== undefined
         )
         .map(async (record) => {
-          const { uid, name, email, avatarURL, lastLoggedIn } = record.data();
-          return { uid, name, email, avatarURL, lastLoggedIn };
+          const { uid, name, email, avatarURL, lastLoggedIn, online } = record.data();
+          return { uid, name, email, avatarURL, lastLoggedIn, online };
         })
     );
 
@@ -56,9 +57,17 @@ export class UserService {
 
     if (!userRef.exists()) return null;
 
-    const { uid, name, email, avatarURL, lastLoggedIn } = userRef.data();
+    const { uid, name, email, avatarURL, lastLoggedIn, online } = userRef.data();
 
-    return { uid, name, email, avatarURL, lastLoggedIn };
+    return { uid, name, email, avatarURL, lastLoggedIn, online };
+  }
+
+  static async setUserOnline(uid: string) {
+    await this.updateUser(uid, { online: true });
+  }
+
+  static async setUserOffline(uid: string) {
+    await this.updateUser(uid, { online: false });
   }
 
   static async createUser(uid: string, fields: Partial<IUser>) {
