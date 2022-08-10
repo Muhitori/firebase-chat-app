@@ -1,14 +1,17 @@
 import { Box, Button } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
-import { useAuthStorage } from 'src/hooks/UseStore';
+import { useAuthStorage, useChatStorage } from 'src/hooks/UseStore';
 import { useStyles } from './styles';
 import { User } from './User';
 
 export const CurrentUser = observer(() => {
   const classes = useStyles();
+
   const authModel = useAuthStorage();
-  const {currentUser} = authModel;
+  const chatModel = useChatStorage();
+
+  const { currentUser } = authModel;
 
   useEffect(() => {
     authModel.setCurrentUserAsync();
@@ -18,6 +21,11 @@ export const CurrentUser = observer(() => {
     if (currentUser) {
       authModel.signOut(currentUser.uid);
     }
+
+    chatModel.setConversationId(null);
+    chatModel.setConversationId(null);
+    chatModel.setMessages(null);
+    chatModel.setCompanionId(null);
   };
   
   return (
